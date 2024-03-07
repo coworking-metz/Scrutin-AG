@@ -1,7 +1,7 @@
-# Documentation du projet de vote pour l'Association Coworking Metz
+# Outil de vote pour l'AG de l'Association Coworking Metz
 
 Ce dépôt contient l'ensemble des fichiers nécessaires à la mise en place d'un système de vote pour l'élection du conseil d'administration de l'Association Coworking Metz. 
-Le système permet de gérer les candidatures, les votes, le dépouillement, et l'affichage des résultats.
+Le système permet de gérer les candidatures, les votes, le dépouillement, et l'affichage des résultats. Il s'agit d'une brique à inclure dans wordpress
 
 ## Structure des fichiers
 
@@ -32,6 +32,3 @@ Le système permet de gérer les candidatures, les votes, le dépouillement, et 
 
 Les contributions au projet sont les bienvenues. Pour contribuer, veuillez forker le dépôt, créer une branche pour votre fonctionnalité ou correction, et soumettre une pull request.
 
-## Licence
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
