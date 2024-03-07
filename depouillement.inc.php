@@ -1,7 +1,9 @@
 <?php
 
 
-
+/**
+ * Afficher le récapitulatif de dépouillement : canddiats élus, votes exprimés, votants
+ */
 function ag_recap_depouillement($users)
 {
     if (!count($users)) {
@@ -29,6 +31,9 @@ function ag_recap_depouillement($users)
     </center>
     <?php
 }
+/**
+ * Indique si la page actuelle est en mode 'affichage du dépouillement'
+ */
 function ag_depouillement()
 {
     if (!isset($_GET['depouillement']))
@@ -36,4 +41,28 @@ function ag_depouillement()
     if (!current_user_can('administrator'))
         return;
     return true;
+}
+
+
+function ag_faire_depouillement($candidats)
+{
+    $candidats = array_filter($candidats, function ($candidat) {
+        return ag_candidat_votes($candidat->ID) > 0;
+    });
+    usort($candidats, function ($a, $b) {
+        $a = ag_candidat_votes($a->ID);
+        $b = ag_candidat_votes($b->ID);
+        if ($a == $b) {
+            return 0;
+        }
+        return ($a < $b) ? 1 : -1;
+    });
+    if (count($candidats) > ag_max()) {
+        $dernier_vote_accepte = ag_candidat_votes($candidats[ag_max() - 1]->ID);
+        $candidats = array_filter($candidats, function ($candidat) use ($dernier_vote_accepte) {
+            return ag_candidat_votes($candidat->ID) >= $dernier_vote_accepte;
+        });
+    }
+
+    return $candidats;
 }

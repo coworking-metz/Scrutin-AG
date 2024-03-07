@@ -1,14 +1,18 @@
 <?php
 
 
-
+/**
+ * Formualaire de vote
+ */
 
 if (!get_current_user_id()) {
+    // page réservée aux membres connectés: Si personne n'est connecté, on redirige vers le formulaire de connexion
     wp_redirect('/mon-compte/?redirect=/candidats-au-conseil-d-administration/');
     exit;
 }
 $users = get_users_candidat_au_ca();
 if (ag_depouillement()) {
+    // Si la page est celle du dépouillement, la liste des utilisateurs est modifiée pour ne conserver que les élus 
     $users = ag_faire_depouillement($users);
 }
 ?>
@@ -20,7 +24,8 @@ if (ag_depouillement()) {
     </h2>
 </center>
 
-<form class="candidats" method="post" action="/?ag-vote">
+<form class="candidats" method="post" action="/election-ca">
+    <input type="hidden" name="action" value="election-ca">
     <?php if (ag_depouillement()) { ?>
         <?php ag_recap_depouillement($users); ?>
     <?php } else { ?>
@@ -61,7 +66,7 @@ if (ag_depouillement()) {
                     </strong>
                     <?php if (ag_depouillement()) { ?>
                         <p>
-                            <?= ag_votes($user->ID) ?> votes
+                            <?= ag_candidat_votes($user->ID) ?> votes
                         </p>
                     <?php } ?>
                 </span>
@@ -73,7 +78,10 @@ if (ag_depouillement()) {
     </ul>
 </form>
 <br><br>
+<br><br>
+<br><br>
 <script>
+    // Variables mises à disposition de vote.js
     const a_deja_vote = <?=json_encode(a_deja_vote());?>;
     const ag_voter = <?= json_encode(ag_voter()); ?>;
     const ag_max = <?= ag_max(); ?>;
