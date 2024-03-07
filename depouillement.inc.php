@@ -43,7 +43,16 @@ function ag_depouillement()
     return true;
 }
 
-
+/**
+ * Effectue le dépouillement des votes pour les candidats.
+ *
+ * Cette fonction filtre d'abord les candidats n'ayant reçu aucun vote. Ensuite, elle trie les candidats
+ * par nombre de votes décroissants. Si le nombre de candidats dépasse le maximum autorisé, elle limite
+ * la liste aux candidats ayant un nombre de votes supérieur ou égal au dernier candidat accepté.
+ *
+ * @param array $candidats Tableau d'objets candidats à dépouiller.
+ * @return array Tableau des candidats filtrés et triés selon les critères de votes.
+ */
 function ag_faire_depouillement($candidats)
 {
     $candidats = array_filter($candidats, function ($candidat) {
