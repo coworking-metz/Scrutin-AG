@@ -44,7 +44,7 @@ if (ag_depouillement()) {
                     <?php } ?>
                 </div>
                 <div>
-                    <?php if (is_user_electeur()) { ?>
+                    <?php if (is_user_electeur() && !a_deja_vote()) { ?>
                         <button class="btn" type="submit">Valider votre choix</button>
                     <?php } ?>
                 </div>
@@ -66,7 +66,7 @@ if (ag_depouillement()) {
                     </strong>
                     <?php if (ag_depouillement()) { ?>
                         <p>
-                            <?= ag_candidat_votes($user->ID) ?> votes
+                            <?= ag_candidat_votes($user) ?> votes
                         </p>
                     <?php } ?>
                 </span>

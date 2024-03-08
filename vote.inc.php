@@ -18,7 +18,7 @@
  * @return void
  */
 
-if (($_POST['action']??false) === 'election-ca') {
+if (($_POST['action'] ?? false) === 'election-ca') {
     add_action('init', function () {
         $uid = get_current_user_id();
 
@@ -140,16 +140,19 @@ function a_deja_vote($uid = false)
  * @param int $uid L'identifiant de l'utilisateur dont on veut compter les votes.
  * @return int Le nombre de votes pour l'utilisateur spécifié pour la date courante, ou zéro si aucune métadonnée n'existe.
  */
-function ag_candidat_votes($uid)
+function ag_candidat_votes($user)
 {
-    $date = ag_date();
-    $key = 'votes-' . $date;
 
-    $votes = get_user_meta($uid, $key, true);
-    if (!$votes)
-        return 0;
+    if (is_numeric($user)) {
+        $date = ag_date();
+        $key = 'votes-' . $date;
+        return @count(get_user_meta($user, $key, true));
+    } else {
+        if (empty($user->votes))
+            return 0;
 
-    return count($votes);
+        return intval($user->votes);
+    }
 }
 
 

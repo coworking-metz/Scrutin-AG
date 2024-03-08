@@ -4,7 +4,14 @@
  * FONCTION RELATIVES AUX UTILISATEURS ET CANDIDATS
  */
 
- 
+ /**
+  * Calcule et retourne le quorum de l'ag (le tiers des membres électeurs)
+  */
+ function ag_quorum() {
+    $nb_electeurs = count(get_users_electeurs());
+    $quorum = ceil($nb_electeurs / 3);
+    return $quorum;
+ }
 /**
  * Récupère tous les utilisateurs dont le meta 'candidat_au_ca' n'est pas false.
  *

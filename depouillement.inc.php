@@ -8,7 +8,10 @@ function ag_recap_depouillement($users)
 {
     if (!count($users)) {
         ?>
-        <center><b>Les votes récoltés sont pour l'instant insufisants pour déterminer les élus</b></center>
+        <center><h5>Les résultats du scrutin seront disponibles une fois le quorum des votes exprimés atteint.</h5>Actuellement, il y a
+            <?= ag_votants(); ?> vote(s) exprimé(s), le quorum est à
+            <?= ag_quorum(); ?>.
+        </center>
         <?php
         return;
     }
@@ -19,7 +22,7 @@ function ag_recap_depouillement($users)
             <?= ag_votants(); ?> électeur/trices
         </b>
         <?php $candidats_en_rab = count($users) - ag_max();
-        if ($candidats_en_rab>0) { ?>
+        if ($candidats_en_rab > 0) { ?>
             <br><small>
                 <?= $candidats_en_rab; ?> candidat(e)
                 <?= $candidats_en_rab > 1 ? 's' : ''; ?> en plus ont été sélectionné(e)s car ils avaient le même nombre de votes
@@ -47,7 +50,11 @@ function ag_depouillement()
  * Effectue le dépouillement des votes pour les candidats.
  *
  * Cette fonction filtre d'abord les candidats n'ayant reçu aucun vote. Ensuite, elle trie les candidats
- * par nombre de votes décroissants. Si le nombre de candidats dépasse le maximum autorisé, elle limite
+ * par nombre de votes décroissants. 
+ * 
+ * On vérifie que le nombre de votes exprimés est supérieur ou égale au quorum
+ * 
+ * Si le nombre de candidats dépasse le maximum autorisé, elle limite
  * la liste aux candidats ayant un nombre de votes supérieur ou égal au dernier candidat accepté.
  *
  * @param array $candidats Tableau d'objets candidats à dépouiller.
@@ -55,23 +62,39 @@ function ag_depouillement()
  */
 function ag_faire_depouillement($candidats)
 {
+    $candidats = array_map(function ($candidat) {
+        $candidat->votes = ag_candidat_votes($candidat->ID) > 0;
+        return $candidat;
+    }, $candidats);
+
     $candidats = array_filter($candidats, function ($candidat) {
-        return ag_candidat_votes($candidat->ID) > 0;
+        return $candidat->votes > 0;
     });
     usort($candidats, function ($a, $b) {
-        $a = ag_candidat_votes($a->ID);
-        $b = ag_candidat_votes($b->ID);
+        $a = $a->votes;
+        $b = $b->votes;
         if ($a == $b) {
             return 0;
         }
         return ($a < $b) ? 1 : -1;
     });
+
+    // $max = max(array_column($candidats, 'votes'));
+
+    // nombre de votes exprimés à date
+    $nb_votes_exprimes = ag_votants();
+
+    // calcul du quorum (un tiers des membres electeurs)
+    if ($nb_votes_exprimes < ag_quorum()) {
+        return [];
+    }
     if (count($candidats) > ag_max()) {
         $dernier_vote_accepte = ag_candidat_votes($candidats[ag_max() - 1]->ID);
         $candidats = array_filter($candidats, function ($candidat) use ($dernier_vote_accepte) {
             return ag_candidat_votes($candidat->ID) >= $dernier_vote_accepte;
         });
     }
+
 
     return $candidats;
 }
