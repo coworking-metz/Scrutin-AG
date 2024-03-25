@@ -18,8 +18,8 @@ function ag_recap_depouillement($users)
     ?>
     <center>
         <b>
-            <?= count($users); ?> candidats élus -
-            <?= ag_votants(); ?> électeur/trices
+            <?= pluriel(count($users), 'candidat(e) élu(e)'); ?>  -
+            <?= pluriel(ag_votants(), 'électeur/trice', 's','/'); ?>
         </b>
         <?php $candidats_en_rab = count($users) - ag_max();
         if ($candidats_en_rab > 0) { ?>
@@ -63,7 +63,7 @@ function ag_depouillement()
 function ag_faire_depouillement($candidats)
 {
     $candidats = array_map(function ($candidat) {
-        $candidat->votes = ag_candidat_votes($candidat->ID) > 0;
+        $candidat->votes = ag_candidat_votes($candidat->ID);
         return $candidat;
     }, $candidats);
 
@@ -84,10 +84,7 @@ function ag_faire_depouillement($candidats)
     // nombre de votes exprimés à date
     $nb_votes_exprimes = ag_votants();
 
-    // calcul du quorum (un tiers des membres electeurs)
-    if ($nb_votes_exprimes < ag_quorum()) {
-        return [];
-    }
+
     if (count($candidats) > ag_max()) {
         $dernier_vote_accepte = ag_candidat_votes($candidats[ag_max() - 1]->ID);
         $candidats = array_filter($candidats, function ($candidat) use ($dernier_vote_accepte) {

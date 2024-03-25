@@ -7,7 +7,7 @@
 
 if (!get_current_user_id()) {
     // page réservée aux membres connectés: Si personne n'est connecté, on redirige vers le formulaire de connexion
-    wp_redirect('/mon-compte/?redirect=/candidats-au-conseil-d-administration/');
+    wp_redirect('/mon-compte/?redirect=/election-ca/');
     exit;
 }
 $users = get_users_candidat_au_ca();
@@ -17,20 +17,20 @@ if (ag_depouillement()) {
 }
 ?>
 <center>
-    <h2>Association Coworking Metz</h2>
-    <h1>Élection du conseil d'administration</h1>
-    <h2>Assemblée générale du
+    <strong>Association Coworking Metz</strong>
+    <h2>Élection du conseil d'administration</h2>
+    <p>Assemblée générale du
         <?= date('d/m/Y', strtotime(ag_date())); ?>
-    </h2>
+</p>
 </center>
 
-<form class="candidats" method="post" action="/election-ca">
+<form class="candidats" method="post" action="/election-ca" data-depouillement="<?=ag_depouillement()?'true':'false';?>">
     <input type="hidden" name="action" value="election-ca">
     <?php if (ag_depouillement()) { ?>
         <?php ag_recap_depouillement($users); ?>
     <?php } else { ?>
         <center>
-            <?= count($users); ?> candidats au total
+            <?= pluriel(count($users),'candidat(e)'); ?> au total
         </center>
 
         <?php if (ag_voter()) { ?>
@@ -66,12 +66,12 @@ if (ag_depouillement()) {
                     </strong>
                     <?php if (ag_depouillement()) { ?>
                         <p>
-                            <?= ag_candidat_votes($user) ?> votes
+                            <?= pluriel(ag_candidat_votes($user),'vote') ?>
                         </p>
                     <?php } ?>
                 </span>
                 <figure>
-                    <img src="/polaroid/<?= $user->ID; ?>.jpg">
+                    <img src="/polaroid/<?= $user->ID; ?>.jpg" loading="lazy">
                 </figure>
             </li>
         <?php } ?>

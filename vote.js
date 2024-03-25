@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Mise à jour l'affichage du statut en fonction du nombre de candidats sélectionnés
      */
     function displayStatus() {
+        updateVoteVisual();
         // Obtient le nombre total de candidats et génère le contenu HTML en fonction du statut de la sélection
         const total = form.querySelectorAll('li').length;
         const html = [];
@@ -71,12 +72,21 @@ document.addEventListener('DOMContentLoaded', () => {
         divStatus.innerHTML = html.join('<br>');
     }
 
+    function updateVoteVisual() {
+        document.querySelectorAll('form.candidats li').forEach(li => {
+            if(li.querySelector('input:checked')){
+                li.dataset.checked=true;
+        } else {
+            delete li.dataset.checked;
+        }
+        })
+    }
     /**
      * retourne le nombre de candidats actuellement sélectionnés
      * @returns int
      */
     function selected() {
-        return form.querySelectorAll('li:has(input:checked)').length;
+        return form.querySelectorAll('li[data-checked="true"]').length;
 
     }
     // Appelle la fonction displayStatus une première fois pour initialiser l'affichage 
