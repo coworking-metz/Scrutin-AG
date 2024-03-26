@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const divStatus = document.querySelector('.vote-status .contenu');
 
     const bouton = document.querySelector('.vote-status button');
+    
+    if(!bouton) return;
 
     /**
      * Mise à jour l'affichage du statut en fonction du nombre de candidats sélectionnés
