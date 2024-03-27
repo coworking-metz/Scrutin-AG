@@ -4,11 +4,15 @@
 /**
  * Formualaire de vote
  */
-
+$admin = isset($_GET['admin']);
 $users = get_users_candidat_au_ca();
 if (ag_depouillement()) {
+    ag_log_message('Accede au dépouillement du vote', 'depouillement');
     // Si la page est celle du dépouillement, la liste des utilisateurs est modifiée pour ne conserver que les élus 
     $users = ag_faire_depouillement($users);
+} else if(get_current_user_id()) {
+    ag_log_message('Accede au portail de vote','access'); 
+
 }
 ?>
 <center>
@@ -24,7 +28,8 @@ if (ag_depouillement()) {
         <p>Vous devez être connecté(e) avec votre compte coworker pour pouvoir voter.</p>
         <a class="btn btn-solid btn-xlg semi-round btn-bordered border-thin ld_button_653a54d4ec23e lqd-unit-animation-done" href="/mon-compte/?redirect=/election-ca/"><span class="btn-txt">Connexion</span></a>
     </center>
-    <?php } else { ?>
+    <?php } else {
+        ?>
 
 <form class="candidats" method="post" action="/election-ca" data-depouillement="<?=ag_depouillement()?'true':'false';?>">
     <input type="hidden" name="action" value="election-ca">
@@ -72,9 +77,12 @@ if (ag_depouillement()) {
                             </p>
                         <?php } ?>
                     </span>
-                    <figure>
-                        <img src="/polaroid/<?= $user->ID; ?>-small.jpg" loading="lazy">
+                    <figure><span style="background-image:<?=ag_micro_pola_content($user->ID);?>"></span>
+                        <img src="/polaroid/<?= $user->ID; ?>-small.jpg">
                     </figure>
+                    <?php if($admin) {?>
+                        <a href="/wp-admin/user-edit.php?user_id=<?=$user->ID;?>">Editer</a>
+                    <?php }?>
                 </li>
             <?php } ?>
         </ul>

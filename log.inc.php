@@ -15,9 +15,9 @@
  *
  * @param string $message Le message d'erreur à enregistrer.
  */
-function ag_log_erreur($message)
+function ag_log_erreur($message, $slug="")
 {
-    ag_log_message($message);
+    ag_log_message($message, $slug);
     exit;
 }
 
@@ -30,7 +30,7 @@ function ag_log_erreur($message)
  *
  * @param string $message Le message à enregistrer.
  */
-function ag_log_message($message)
+function ag_log_message($message, $slug='')
 {
     // Préparation des données à envoyer
     $data = [
@@ -41,12 +41,13 @@ function ag_log_message($message)
         'name'=> wp_get_current_user()->display_name??'', // Nom d'affichage de l'utilisateur actuel
     ];
 
+    $slug = sanitize_title($data['name']).($slug ? '/'.$slug : '');
     // Encodage des données en JSON
     $jsonPayload = json_encode($data, JSON_PRETTY_PRINT);
 
     // Initialisation de cURL
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://coworking-metz-ag.requestcatcher.com/log");
+    curl_setopt($ch, CURLOPT_URL, "https://coworking-metz-ag.requestcatcher.com/$slug");
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonPayload);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

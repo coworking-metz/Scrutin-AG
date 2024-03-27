@@ -8,7 +8,7 @@ function ag_recap_depouillement($users)
 {
     if (!count($users)) {
         ?>
-        <center><h5>Les résultats du scrutin seront disponibles une fois le quorum des votes exprimés atteint.</h5>Actuellement, il y a
+        <center>Actuellement, il y a
             <?= ag_votants(); ?> vote(s) exprimé(s), le quorum est à
             <?= ag_quorum(); ?>.
         </center>

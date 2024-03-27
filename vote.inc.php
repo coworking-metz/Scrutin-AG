@@ -26,7 +26,7 @@ if (($_POST['action'] ?? false) === 'election-ca') {
             exit;
 
         if (a_deja_vote($uid))
-            ag_log_erreur('Tentative de vote multiple');
+            ag_log_erreur('Tentative de vote multiple',"error");
 
         ag_sauver_votes($uid, $_POST['candidats']);
         wp_redirect('/election-ca/');
@@ -115,7 +115,7 @@ function ag_sauver_votes($uid, $candidats)
     }
 
     update_user_meta($uid, 'a-vote-' . $date, true);
-    ag_log_message('Vote enregistré');
+    ag_log_message('Vote enregistré','vote');
 }
 /**
  * Vérifie si l'utilisateur a déjà voté pour la date courante.
@@ -146,7 +146,9 @@ function ag_candidat_votes($user)
     if (is_numeric($user)) {
         $date = ag_date();
         $key = 'votes-' . $date;
-        return @count(get_user_meta($user, $key, true));
+        $votes = get_user_meta($user, $key, true);
+        if(!$votes) return 0;
+        return @count($votes);
     } else {
         if (empty($user->votes))
             return 0;
