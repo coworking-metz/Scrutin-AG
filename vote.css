@@ -2,7 +2,15 @@ h1,
 h2 {
     margin: 0 !important;
 }
-
+html,body {
+    min-height: 100%;
+    margin-top: 0 !important;
+    --wp-admin--admin-bar--height:0
+}
+body #wrap #content{
+    /* background: url(https://lvsbvjweppdlhmjuqqvt.supabase.co/storage/v1/object/public/medias/medias/video-banner.jpg);
+    background-size: cover; */
+}
 h2 {
     font-size: clamp(0.7rem, 5vmax, 1.5rem) !important;
 }

@@ -78,7 +78,7 @@ if (ag_depouillement()) {
                         <?php } ?>
                     </span>
                     <figure><span style="background-image:<?=ag_micro_pola_content($user->ID);?>"></span>
-                        <img src="/polaroid/<?= $user->ID; ?>-small.jpg">
+                        <img src="https://photos.coworking-metz.fr/polaroid/size/medium/<?= $user->ID; ?>.jpg">
                     </figure>
                     <?php if($admin) {?>
                         <a href="/wp-admin/user-edit.php?user_id=<?=$user->ID;?>">Editer</a>

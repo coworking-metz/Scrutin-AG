@@ -2,9 +2,8 @@
 function ag_micro_pola_content($uid) {
     $transient_name = 'ag_micro_pola_' . $uid;
     $content = get_transient($transient_name);
-    
     if (false === $content) {
-        $url = site_url() . '/polaroid/' . $uid . '-micro.jpg';
+        $url = 'https://photos.coworking-metz.fr/polaroid/size/micro/'.$uid.'.jpg';
         $content = file_get_contents($url);
         $base64_content = base64_encode($content);
         set_transient($transient_name, $base64_content, DAY_IN_SECONDS);
