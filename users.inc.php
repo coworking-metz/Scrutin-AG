@@ -1,4 +1,6 @@
 <?php
+
+
 function ag_micro_pola_content($uid) {
     $transient_name = 'ag_micro_pola_' . $uid;
     $content = get_transient($transient_name);
@@ -59,7 +61,7 @@ function get_users_electeurs()
     $votants = get_transient('users_electeurs');
     if (false === $votants) {
         // Transient does not exist, so we fetch the data
-        $json = file_get_contents('https://tickets.coworking-metz.fr/api/voting-members?key=bupNanriCit1');
+        $json = file_get_contents(TICKET_BASE_URL.'/voting-members?key=bupNanriCit1');
         $votants = json_decode($json, true);
         // Store the result in a transient that expires after 12 hours (43200 seconds)
         set_transient('users_electeurs', $votants, 12 * HOUR_IN_SECONDS);

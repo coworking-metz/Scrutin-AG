@@ -31,7 +31,85 @@ function ag_candidats()
     include __DIR__ . '/formulaire.inc.php';
 }
 
+/**
+* Page de liste des candidats
+*/
+if(isset($_GET['candidat_au_ca'])) {
 
+
+	add_action('mu_plugin_loaded',function() {
+		$meta_query = [
+			[
+				'key'     => 'candidat_au_ca',
+				'value'   => '0',
+				'compare' => '!=',
+			],
+		];
+
+		add_action('pre_get_users', function ($query) use($meta_query){
+			if (is_admin()) {
+
+				$query->set('meta_query', $meta_query);
+			}
+		});
+
+		add_filter('views_users', function ($views) use ($meta_query) {
+			$user_query = new WP_User_Query([
+				'meta_query' => $meta_query
+			]);
+
+			$count = $user_query->get_total();
+
+			$class = 'current';
+			$views['all'] = preg_replace('/class="current"/', '', $views['all']);
+			$item = sprintf(
+				'<a href="%s" class="%s">Candidats <span class="count">(%d)</span></a>',
+				admin_url('users.php?candidats=1'),
+				esc_attr($class),
+				$count
+			);
+			return array_merge(['candidats' => $item], $views);
+		});
+	});
+
+}
+
+if(isset($_GET['votants'])) {
+
+	add_action('mu_plugin_loaded',function() {
+		$votants = tickets('/voting-members?minActivity=20');
+		add_action('pre_user_query', function($user_query) use ($votants) {
+			if (is_admin()) {
+				global $wpdb;
+					$emails = array_column($votants,'email');
+
+				$placeholders = implode(', ', array_fill(0, count($emails), '%s'));
+				$user_query->query_where .= $wpdb->prepare(" AND user_email IN ($placeholders)", $emails);
+			}
+		});
+		add_filter('users_per_page', function($users_per_page) use ($votants) {
+			return count($votants);
+		});
+
+		add_filter('views_users', function ($views) use ($votants) {
+
+			$votants = tickets('/voting-members?minActivity=20');
+			$count = count($votants);
+
+			$class = 'current';
+	        $views['all'] = preg_replace('/class="current"/', '', $views['all']);
+			$item = sprintf(
+				'<a href="%s" class="%s">Votants <span class="count">(%d)</span></a>',
+				admin_url('users.php?votants=1'),
+				esc_attr($class),
+				$count
+			);
+
+		    return array_merge(['votants' => $item], $views);
+		});
+	});
+
+}
 /**
  * Génère un UUID en utilisant l'API https://www.uuidtools.com/api/generate/v1
  *

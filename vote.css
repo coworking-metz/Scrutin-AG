@@ -112,9 +112,9 @@ h1 {
     border-radius: 5px;
 }
 
-[data-depouillement="false"] .candidats li:after {
+.candidats[data-depouillement="false"]  li:after {
     white-space: pre;
-    content: "Sélectionner ce/cette\a candidat(e)";
+    content: "Sélectionner";
     display: block;
     color: white;
     font-weight: bold;
@@ -126,7 +126,7 @@ h1 {
 }
 
 .candidats li[data-checked="true"]:after {
-    content: '✅ Candidat(e)\asélectionné(e)';
+    content: '✅ Sélectionné(e)';
     background-color: green;
     color: white
 }
