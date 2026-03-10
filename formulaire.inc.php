@@ -31,7 +31,7 @@ if (ag_depouillement()) {
     <?php } else {
         ?>
 
-<form class="candidats" method="post" action="/election-ca" data-depouillement="<?=ag_depouillement()?'true':'false';?>">
+<form class="candidats" data-voter="<?=ag_voter()?'true':'false';?>" method="post" action="/election-ca" data-depouillement="<?=ag_depouillement()?'true':'false';?>">
     <input type="hidden" name="action" value="election-ca">
         <?php if (ag_depouillement()) { ?>
             <?php ag_recap_depouillement($users); ?>

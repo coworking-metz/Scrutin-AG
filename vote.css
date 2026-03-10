@@ -112,7 +112,7 @@ h1 {
     border-radius: 5px;
 }
 
-.candidats[data-depouillement="false"]  li:after {
+.candidats[data-depouillement="false"][data-voter="true"]  li:after {
     white-space: pre;
     content: "Sélectionner";
     display: block;

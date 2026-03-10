@@ -9,6 +9,8 @@ include __DIR__ . '/log.inc.php'; // fonctions de log
 include __DIR__ . '/reglages.inc.php'; // fonctions pour lire les réglages de l'ag
 include __DIR__ . '/depouillement.inc.php'; // fonctions relatives au dépouillement des votes
 
+
+
 /**
  * Ajout des CSS et JS dédiées au formulaire de vote
  */

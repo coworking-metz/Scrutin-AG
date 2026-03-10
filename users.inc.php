@@ -43,7 +43,7 @@ function get_users_candidat_au_ca($depouillement = false)
     ]);
 
     $users = array_filter($users, function ($user) {
-        return $user->candidat_au_ca;
+        return $user->candidat_au_ca && is_user_electeur($user->ID);
     });
     shuffle($users);
 
